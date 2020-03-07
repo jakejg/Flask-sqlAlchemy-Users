@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block user %}
+<h1>{{user.get_full_name()}}</h1>
+<div class="card" style="width: 18rem;">
+    <img src="{{user.image_url}}" class="card-img-top" alt="image here">
+    <div class="card-body">
+      <h5 class="card-title">{{user.get_full_name()}}</h5>
+      <a href="/users/{{user.id}}/edit" class="btn btn-primary">Edit</a>
+      <a href="/users/{{user.id}}/delete" class="btn btn-danger">Delete</a>
+    </div>
+  </div>
+{% endblock %}
