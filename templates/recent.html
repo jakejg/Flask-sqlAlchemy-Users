@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block recent %}
+<h1 style="text-align: center">Recent Posts</h1>
+<br>
+{% for post in posts %}
+<h3><a href="/posts/{{post.id}}">{{post.title}}</a></h3>
+<p>{{post.content}}</p>
+<blockquote><i>By {{post.user.get_full_name()}} at {{post.created_at.strftime("%A %b %Y, %I:%M%p")}}</i></blockquote>
+
+{% endfor %}
+
+{% endblock %}

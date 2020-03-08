@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app import app
-from models import db, Users
+from models import db, User, Post
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_test'
@@ -19,10 +19,10 @@ db.create_all()
 class FlaskTests(TestCase):
 
     def setUp(self):
-        self.user = Users(first_name= "First", last_name= "Last")
+        self.user = User(first_name= "First", last_name= "Last")
         
     def tearDown(self):
-        Users.query.delete()
+        User.query.delete()
         db.session.commit()
         db.session.rollback()
 
@@ -30,7 +30,7 @@ class FlaskTests(TestCase):
         self.user.first_name= "NewFirst"
         db.session.add(self.user)
         db.session.commit()
-        updated = Users.query.get(self.user.id)
+        updated = User.query.get(self.user.id)
         self.assertEqual(updated.first_name, "NewFirst")
     
     def test_add_user(self):
@@ -39,7 +39,7 @@ class FlaskTests(TestCase):
             resp = client.post("/users/new", data=d, follow_redirects=True)
             self.assertEqual(resp.status_code, 200)
 
-            test_user = Users.query.filter_by(first_name="testFirst").first()
+            test_user = User.query.filter_by(first_name="testFirst").first()
             self.assertEqual(test_user.image_url, "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
             
             html = resp.get_data(as_text=True)

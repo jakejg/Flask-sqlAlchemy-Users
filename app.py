@@ -1,6 +1,6 @@
 """Blogly application."""
-
-from flask import Flask, request, redirect, render_template
+import datetime
+from flask import Flask, request, redirect, render_template, flash
 from models import db, connect_db, User, Post
 
 app = Flask(__name__)
@@ -19,7 +19,8 @@ db.create_all()
 
 @app.route('/')
 def home():
-    return redirect('/users')
+    posts = Post.query.order_by("created_at").limit(5).all()
+    return render_template('recent.html', posts=posts)
     
 @app.route('/users')
 def list_users():
@@ -43,7 +44,7 @@ def user_form_data():
 
     db.session.add(new_user)
     db.session.commit()
-
+    
     return redirect('/users')
 
 @app.route('/users/<int:user_id>')
@@ -133,6 +134,10 @@ def delete_post(post_id):
     db.session.commit()
     
     return redirect(f'/users/{user_id}')
+
+@app.errorhandler(404) 
+def not_found(e):  
+  return render_template("404.html") 
 
 
 
