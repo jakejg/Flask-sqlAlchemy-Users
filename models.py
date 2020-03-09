@@ -29,7 +29,7 @@ class User(db.Model):
     def get_full_name(self):
         return self.first_name + " " + self.last_name
 
-    posts = db.relationship("Post", backref="user", cascade="all, delete, delete-orphan")
+    posts = db.relationship("Post", backref="user", passive_deletes=True)
 
 class Post(db.Model):
 
@@ -45,7 +45,7 @@ class Post(db.Model):
 
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
 
     # user = db.relationship('User', backref="posts", cascade="all, delete")
 
