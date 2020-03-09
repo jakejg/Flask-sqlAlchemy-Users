@@ -29,6 +29,8 @@ class User(db.Model):
     def get_full_name(self):
         return self.first_name + " " + self.last_name
 
+    posts = db.relationship("Post", backref="user", cascade="all, delete, delete-orphan")
+
 class Post(db.Model):
 
     __tablename__ = "posts"
@@ -45,6 +47,6 @@ class Post(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    user = db.relationship('User', backref='posts')
+    # user = db.relationship('User', backref="posts", cascade="all, delete")
 
 

@@ -45,6 +45,7 @@ def user_form_data():
     db.session.add(new_user)
     db.session.commit()
     
+    flash("New user created!")
     return redirect('/users')
 
 @app.route('/users/<int:user_id>')
