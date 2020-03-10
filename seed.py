@@ -1,4 +1,4 @@
-from models import User, db, Post
+from models import User, db, Post, Tag, PostTag
 from app import app
 
 # Create all tables
@@ -25,7 +25,20 @@ post3 = Post(title='Kittens', content= 'Kittens is great!', user_id=1)
 post4 = Post(title='Cereal', content= 'Today I ate ceral with strawberries!', user_id=2)
 post5 = Post(title='Drawing', content= 'I love to draw!', user_id=2)
 
-db.session.add_all([post1, post2, post3, post4, post5])
+outdoors = Tag(name="Outdoors")
+food = Tag(name="Food")
+art = Tag(name="Art")
+animals = Tag(name="Animals")
+
+db.session.add_all([post1, post2, post3, post4, post5, outdoors, food, art, animals])
 db.session.commit()
+
+post_tag1 = PostTag(post_id=1, tag_id=1)
+post_tag2 = PostTag(post_id=5, tag_id=3)
+post_tag3 = PostTag(post_id=2, tag_id=1)
+
+db.session.add_all([post_tag1, post_tag2, post_tag3])
+db.session.commit()
+
 
 

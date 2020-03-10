@@ -4,6 +4,11 @@
 <h1>{{post.title}}</h1>
 <p>{{post.content}}</p>
 <blockquote><i>By {{post.user.get_full_name()}}</i></blockquote>
+<div>Tags: {% for tag in tags %}
+    <span class="badge badge-primary">{{tag.name}}</span>
+    {% endfor %}
+</div>
+<br>
 <a href="/users/{{post.user_id}}" class="btn btn-outline-primary">Go Back</a>
 <a href="/posts/{{post.id}}/edit" class="btn btn-primary">Edit</a>
 <a href="/posts/{{post.id}}/delete" class="btn btn-danger">Delete</a>

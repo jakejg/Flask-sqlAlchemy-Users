@@ -47,6 +47,29 @@ class Post(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='CASCADE'))
 
-    # user = db.relationship('User', backref="posts", cascade="all, delete")
+    # relationship to tag through postTag table
+    tags = db.relationship("Tag", secondary="post_tags", backref="posts")
 
+    # separate relationship to postTag table
+    post_tag = db.relationship("PostTag", backref="posts")
+
+class PostTag(db.Model):
+
+    __tablename__ = "post_tags"
+
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'), primary_key=True)
+
+    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+
+
+class Tag(db.Model):
+
+    __tablename__ = "tags"
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    name = db.Column(db.String(50),
+                            nullable=False,
+                            unique=True)
+    post_tag = db.relationship("PostTag", backref="tags")
 
