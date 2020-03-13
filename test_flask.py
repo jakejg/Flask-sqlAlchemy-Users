@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app import app
-from models import db, User, Post
+from models import db, User, Post, PostTag, Tag
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly_test'
@@ -22,7 +22,10 @@ class FlaskTests(TestCase):
         self.user = User(first_name= "First", last_name= "Last")
         
     def tearDown(self):
+        PostTag.query.delete()
+        Post.query.delete()
         User.query.delete()
+        Tag.query.delete()
         db.session.commit()
         db.session.rollback()
 
@@ -64,6 +67,36 @@ class FlaskTests(TestCase):
             html = resp.get_data(as_text=True)
             self.assertEqual(resp.status_code, 200)
             self.assertNotIn('First Last', html)
+
+    def test_edit_post(self):
+        db.session.add(self.user)
+        db.session.commit()
+        self.post = Post(title="test post", content="test description", user_id=self.user.id)
+        self.tag = Tag(name="Outdoors")
+        db.session.add_all([self.post, self.tag])
+        db.session.commit()
         
+        with app.test_client() as client:
+            d = {"tag_id": ['1'], "title": "test_title", "content": "test_content"}
+            resp = client.post("/posts/1/edit", data=d, follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+
+            html = resp.get_data(as_text=True)
+            self.assertIn('Outdoors', html)
+
+    def test_create_tag(self):
+        db.session.add(self.user)
+        db.session.commit()
+        
+        with app.test_client() as client:
+            d = {"name": "Kittens"}
+            resp = client.post("/tags/new", data=d, follow_redirects=True)
+            self.assertEqual(resp.status_code, 200)
+
+            html = resp.get_data(as_text=True)
+            self.assertIn('Kittens', html)
+            
+        
+
 
 

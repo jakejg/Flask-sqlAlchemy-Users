@@ -31,6 +31,8 @@ class UserTests(TestCase):
         test_user = User.query.get(self.user.id)
         self.assertEqual(test_user.image_url, "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png")
 
+class PostTests(TestCase):
+    
     def test_foreign_key(self):
         self.post = Post(title="test post", content="test description", user_id=self.user.id)
         db.session.add(self.post)
